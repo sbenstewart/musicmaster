@@ -247,7 +247,7 @@ pre code {
 }
 .hljs-regexp,
 .hljs-addition {
-  color: $green;
+  color: green;
 }
 .hljs-symbol,
 .hljs-ruby .symbol .string,
@@ -258,5 +258,5 @@ pre code {
   color: #a50062;
 }
 .hljs-diff .change {
-  background: $orange;
+  background: orange;
 }
