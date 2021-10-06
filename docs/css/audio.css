@@ -33,9 +33,10 @@ footer, header, hgroup, menu, nav, section {
   display: block
 }
 
-/*body {
+body {
   line-height: 1;
-}*/
+  background-color: #ecf0f1;
+}
 
 ol, ul {
   list-style: none;
@@ -124,6 +125,7 @@ hr {
   width: 700px;
   margin: 5em auto;
   padding: 20px;
+  background-color: #ecf0f1;
 }
 
 /* Buttons */
@@ -408,3 +410,27 @@ audio {
 .cf:after {
   clear: both;
 }
+
+.logo,a.button,h2{text-align:center}
+
+.logo{font-family:'Gotham SSm A','Gotham SSm B','Helvetica Neue',Helvetica,Arial,sans-serif}
+
+.logo span:first-of-type{color:#ec008c}
+
+.logo span:last-of-type{color:#12acef}
+
+h1,h2,h3{color:#000}
+
+h1{font-size:3em}
+
+h2{margin:1.875em 0;font-size:1.75em}
+
+h3{margin:1.5em 0;font-size:1.5em}
+
+h2,h3{line-height:1.2; font-weight: bolder;}
+
+p{margin-bottom:1.25em;
+line-height: 1.5;
+text-align: justify;
+}
+

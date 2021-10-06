@@ -5,10 +5,15 @@
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="WebRTC, SimpleWebRTC, Talky, Talky.io, library, JavaScript, Node.js">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Akronim&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="//cloud.typography.com/7773252/764742/css/fonts.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.min.css">
 
     <link rel="icon" type="image/png" href="img/favicon.png">
@@ -32,7 +37,7 @@
         <h2 id="sandbox-server">Do not use the default sandbox signaling server in production</h2>
         <p>The signaling server is a server that helps the two browsers exchange a small amount of information they need to connect to each other in a secure manner.</p>
         <p>We provide a sandbox signaling server so it easy to get started. However, installing <a href="https://github.com/andyet/signalmaster">Signalmaster</a> is one of the first things to do when you want to dive deeper. Then just point the url attribute in the SimpleWebRTC constructor to your server url:</p>
-        <pre><code>var webrtc = new SimpleWebRTC({
+        <pre data-aos="fade-left"><code>var webrtc = new SimpleWebRTC({
   // the id/element dom element that will hold "our" video
   localVideoEl: 'localVideo',
   // the id/element dom element that will hold remote videos
@@ -47,12 +52,12 @@
         <h2 id="basic-overlay">Add style your video element</h2>
         <p>Most of the time, you want to wrap your video element in a container, e.g. to add overlays instead of just having raw unstyled video elements in your remote video container.</p>
         <p>To do this, you need to supress adding them to the remote video container by passing an empty string for the container id:</p>
-        <pre><code>var webrtc = new SimpleWebRTC({
+        <pre  data-aos="fade-right"><code>var webrtc = new SimpleWebRTC({
   localVideoEl: 'localVideo',
   remoteVideosEl: '' // empty string
 });</code></pre>
         <p>Then, you need to hook the <i>videoAdded</i> event. It is called with the video element and the peer session as an argument:</p>
-        <pre><code>// a peer video has been added
+        <pre  data-aos="fade-left"><code>// a peer video has been added
 webrtc.on('videoAdded', function (video, peer) {
     console.log('video added', peer);
     var remotes = document.getElementById('remotes');
@@ -69,7 +74,7 @@ webrtc.on('videoAdded', function (video, peer) {
     }
 });</code></pre>
         <p>You create div element, set a className so you can style all video containers using CSS and add an id so you can remove that video element later on.</p>
-        <pre><code>// a peer video was removed
+        <pre  data-aos="fade-right"><code>// a peer video was removed
 webrtc.on('videoRemoved', function (video, peer) {
     console.log('video removed ', peer);
     var remotes = document.getElementById('remotes');
@@ -79,7 +84,7 @@ webrtc.on('videoRemoved', function (video, peer) {
     }
 });</code></pre>
         <p>Lets add a little CSS so you can create overlays in the next step:</p>
-        <pre><code>.videoContainer {
+        <pre  data-aos="fade-left"><code>.videoContainer {
     position: relative;
     width: 200px;
     height: 150px;
@@ -94,7 +99,7 @@ webrtc.on('videoRemoved', function (video, peer) {
 
         <h2 id="connstates">Show more information about the state of the connection</h2>
         <p>The way the <a href="//w3c.github.io/webrtc-pc/">RTCPeerConnection API</a> works you get the stream (and therefore the video element) before the P2P connection is fully established. Therefore it's a good idea to display information about the state of the connection as done on the <a href="/demo.html">demo page</a>. Just extend the previous example a little bit by adding the following piece of code in the videoAdded event:</p>
-        <pre><code>
+        <pre  data-aos="fade-right"><code>
     // show the ice connection state
     if (peer && peer.pc) {
         var connstate = document.createElement('div');
@@ -122,7 +127,7 @@ webrtc.on('videoRemoved', function (video, peer) {
     }
 </code></pre>
         <p>This code adds an overlay inside the video container that visualized the connection state. Whenever the connection state changes, the callback for the iceConnectionStateChange will be called and you can inspect the new state of the connection. Note that some events like <i>connected</i> or <i>disconnected</i> can be called multiple times when there are short interruptions in connectivity. Now let's just add another bit of CSS:</p>
-        <pre><code>.connectionstate {
+        <pre  data-aos="fade-left"><code>.connectionstate {
     position: absolute;
     top: 0px;
     width: 100%;
@@ -131,7 +136,7 @@ webrtc.on('videoRemoved', function (video, peer) {
 }</code></pre>
         <p>This positions the displayed at the top of the video container, centers it and makes it white. Of course, you can display it any other way you want, it just depends on your CSS magic.</p>
         <p>The <i>failed</i> state is somewhat special. In Chrome, this can only occur on the initiating side whereas in Firefox it can happen on both sides. SimpleWebRTC abstracts this by providing two events for this:</p>
-        <pre><code>// local p2p/ice failure
+        <pre  data-aos="fade-right"><code>// local p2p/ice failure
 webrtc.on('iceFailed', function (peer) {
     var connstate = document.querySelector('#container_' + webrtc.getDomId(peer) + ' .connectionstate');
     console.log('local fail', connstate);
@@ -158,7 +163,7 @@ webrtc.on('connectivityError', function (peer) {
         <p>Another thing that is nice to show is the audio level of a participant. Due to <a href="https://code.google.com/p/chromium/issues/detail?id=121673">some restrictions in Chrome</a>, it is currently only available from local mediastreams and not from MediaStreams received via a WebRTC peerconnections.</p>
         <p>We are going to use <a href="https://github.com/otalk/hark">hark</a>, an awesome Javascript module, to extract the audio level from the MediaStream with the WebAudio API. One of the advantage of this over other techniques (like querying the PeerConnections getStats method) is that it does not require an established peer-to-peer connection and therefore can be used in a screen that allows the users to check their microphone before joining a conference (see <a href="https://talky.io/">the haircheck screen</a> on Talky for an example</a>).</p>
         <p>Since we will have different sources for the volume, let's start with a helper function that changes the height of a value of a HTML5 <i>meter</i> element that is overlayed ontop of the video element:</p>
-        <pre><code>// helper function to show the volume
+        <pre  data-aos="fade-left"><code>// helper function to show the volume
 function showVolume(el, volume) {
     console.log('showVolume', volume, el);
     if (!el) return;
@@ -168,7 +173,7 @@ function showVolume(el, volume) {
 }</code></pre>
         <p>See the <a href="https://github.com/otalk/hark#understanding-dbvolume-threshold">hark documentation</a> for the meaning of the volume parameter and play around with the parameters a little.</p>
         <p>Next, add a little bit of CSS:</p>
-<pre><code>.volume {
+<pre  data-aos="fade-right"><code>.volume {
     position: absolute;
     left: 15%;
     width: 70%;
@@ -176,7 +181,7 @@ function showVolume(el, volume) {
     height: 10px;
 }</pre></code>
         <p>And we need to create this volume meter element when creating the remote video, so add the following piece of code in the videoAdded element:</p>
-<pre><code>
+<pre  data-aos="fade-left"><code>
     // show the remote volume
     var vol = document.createElement('meter');
     vol.id = 'volume_' + peer.id;
@@ -189,13 +194,13 @@ function showVolume(el, volume) {
 </pre></code>
         <p>See the <a href="/demo.html">demo</a> for the full code. If you test this make sure you open the page in two different windows, not tabs, since browsers limit the number of times callbacks are executed in background pages.</p>
         <p>Now, hook it up with the localStream. SimpleWebRTC includes hark and lets you subscribe to a <i>volumeChange</i> event:</p>
-        <pre><code>// local volume has changed
+        <pre  data-aos="fade-right"><code>// local volume has changed
 webrtc.on('volumeChange', function (volume, treshold) {
     showVolume(document.getElementById('localVolume'), volume);
 });</code></pre>
         <p>Now you should get a nice volume meter when you speak. Isn't that awesome?</p>
         <p>Showing the volume of remote participants is a little more tricky due to the Chrome bug. Under the hood, this involves WebRTC datachannels and transferring the local volume to your peers. But everything is nicely hidden by SimpleWebRTC, so all you need is this little piece of Javascript:</p>
-        <pre><code>// remote volume has changed
+        <pre  data-aos="fade-left"><code>// remote volume has changed
 webrtc.on('remoteVolumeChange', function (peer, volume) {
     showVolume(document.getElementById('volume_' + peer.id), volume);
 });</code></pre>
@@ -206,18 +211,18 @@ webrtc.on('remoteVolumeChange', function (peer, volume) {
         <h2 id="mute">All about muting</h2>
         <p>There are a number of usecases where you want to mute either your own audio/video stream or the stream of a remote participant. Let's look at those in detail.<p>
         <p>Muting your own audio is pretty easy. To mute, just call</p>
-        <pre><code>webrtc.mute()</pre></code>
+        <pre  data-aos="fade-right"><code>webrtc.mute()</pre></code>
         <p>and to unmute call</p>
-        <pre><code>webrtc.unmute()</pre></code>
+        <pre  data-aos="fade-left"><code>webrtc.unmute()</pre></code>
         <p>Pretty simple, eh? If you hook it up to a button, make sure you wrap іt inside a function which just toggles a <i>muted</i> state.</p>
         <p>Turning video on and off works similar, use the <i>.pauseVideo()</i> and <i>.resumeVideo()</i> methods to control the video:</p>
-        <pre><code>webrtc.pauseVideo();
+        <pre  data-aos="fade-right"><code>webrtc.pauseVideo();
 webrtc.resumeVideo();</pre></code>
         <p>Now, if you want to mute your audio and not send video there is a shortcut for that. The <i>.pause()</i> and <i>.resume()</i> methods. Unfortunately, this modifies both your muted and video send state, so make sure you keep track of those states.</p>
         <p>Internally, the mute methods work by changing the audio or video tracks <i>.enabled</i> flag. Setting this flag to false causes WebRTC implementations to send silence (for audio) and black frames (for video). This requires relatively little bandwidth.</p>
         <p>So now you are no longer sending audio and video. Wouldn't it be nice if the remote side was notified of that so it could do something more useful than displaying a black frame?</p>
         <p>Whenever you mute or unmute someone, a message is sent via the signaling channel. Listening for this message is easy:</p>
-        <pre><code>// listen for mute and unmute events
+        <pre  data-aos="fade-left"><code>// listen for mute and unmute events
 webrtc.on('mute', function (data) { // show muted symbol
     webrtc.getPeers(data.id).forEach(function (peer) {
         if (data.name == 'audio') {
@@ -239,7 +244,7 @@ webrtc.on('unmute', function (data) { // hide muted symbol
     });
 });</pre></code>
         <p>This uses jQuery to show and hide mute symbols as overlays ontop the video. Again, those elements need to be created in the videoAdded event:</p>
-        <pre><code>    // add muted and paused elements
+        <pre  data-aos="fade-right"><code>    // add muted and paused elements
     var muted = document.createElement('span');
     vol.className = 'muted';
     container.appendChild(muted);
@@ -249,7 +254,7 @@ webrtc.on('unmute', function (data) { // hide muted symbol
     container.appendChild(muted);
 </pre></code>
         <p>and styled with a little CSS:</p>
-        <pre><code>
+        <pre  data-aos="fade-left"><code>
 .muted, .paused
     display: none
     position: absolute
@@ -267,7 +272,7 @@ webrtc.on('unmute', function (data) { // hide muted symbol
     width: 100%
 </pre></code>
         <p>For the local video, similar events are available:</p>
-        <pre><code>//local mute/unmute events
+        <pre  data-aos="fade-right"><code>//local mute/unmute events
 webrtc.on('audioOn', function () {
     // your local audio just turned on
 });
@@ -287,7 +292,7 @@ webrtc.on('videoOff', function () {
         <h2 id="filetransfer">Filetransfer</h2>
         <p>Filetransfer refers to sending a file to a single peer. If you want to share the same file with multiple participants, uploading it to a server is most likely a better way to do it. Or implementing something like <a href="https://webtorrent.io">Bittorrent over WebRTC</a>. Using the following technique to share a file with multiple participants works, but will be limited by the upload speed.</p>
         <p>Let's start with a modified version of the basic SimpleWebRTC HTML structure:</p>
-        <pre><code>&lt;!DOCTYPE html&gt;
+        <pre  data-aos="fade-left"><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
     &lt;head&gt;
         &lt;script src=&quot;https://simplewebrtc.com/latest-v2.js&quot;&gt;&lt;/script&gt;
@@ -297,7 +302,7 @@ webrtc.on('videoOff', function () {
     &lt;/body&gt;
 &lt;/html&gt;</code></pre>
         <p>Next, lets create the SimpleWebRTC object. This time, we don't want audio or video, so we set autoRequestMedia to false and also tweak the receive options:</p>
-        <pre><code>var webrtc = new SimpleWebRTC({
+        <pre  data-aos="fade-right"><code>var webrtc = new SimpleWebRTC({
     // we don't do video
     localVideoEl: '',
     remoteVideosEl: '',
@@ -310,10 +315,10 @@ webrtc.on('videoOff', function () {
     }
 });</code></pre>
         <p>Since the readyToJoin callback relies on having access to the camera we just ignore it and join the room directly:</p>
-        <code><pre>// join without waiting for media
+        <code><pre  data-aos="fade-left">// join without waiting for media
 webrtc.joinRoom('your awesome room name');</code></pre>
         <p>This will join the room and create a connection with every peer that joins. So let's wait for a peer to join:</p>
-        <pre><code>// called when a peer is created
+        <pre  data-aos="fade-right"><code>// called when a peer is created
 webrtc.on('createdPeer', function (peer) {
     console.log('createdPeer', peer);
 });</code></pre>
@@ -323,7 +328,7 @@ webrtc.on('createdPeer', function (peer) {
             <li>receive a file from them.</li>
         </ul>
         <p>Let's look at the receive part first:</p>
-        <pre><code>// receiving an incoming filetransfer
+        <pre  data-aos="fade-left"><code>// receiving an incoming filetransfer
 peer.on('fileTransfer', function (metadata, receiver) {
     console.log('incoming filetransfer', metadata.name, metadata);
     receiver.on('progress', function (bytesReceived) {
@@ -346,11 +351,11 @@ peer.on('fileTransfer', function (metadata, receiver) {
         <p>That was easy, wasn't it? Lets look at sending the file next.</p>
 
         <p>First, we need the user to select a file to transfer. This is done with an &lt;input&gt; element:</p>
-        <pre><code>// select a file
+        <pre  data-aos="fade-right"><code>// select a file
 var fileinput = document.createElement('input');
 fileinput.type = 'file';</code></pre>
         <p>We then need to listen for the change event on that filelistener:</p>
-        <pre><code>// send a file
+        <pre  data-aos="fade-left"><code>// send a file
 fileinput.addEventListener('change', function() {
     fileinput.disabled = true;
 
@@ -378,7 +383,7 @@ fileinput.addEventListener('change', function() {
         <h4>Chrome</h4>
         <p>Chrome exposes APIs for screen sharing through the <a href="https://developer.chrome.com/extensions/desktopCapture" target="_blank">desktopCapture extension API</a>. <a href="https://github.com/HenrikJoreteg/getScreenMedia/">getScreenMedia</a> contains a <a href="https://github.com/HenrikJoreteg/getScreenMedia/tree/master/chrome-extension-sample">Chrome extension sample</a> for enabling screen capture in Chrome.</p>
         <p>To run the extension for your application, you just have to <a href="https://developer.chrome.com/extensions/getstarted#unpacked">load the extension</a> example, and modify the manifest file to match your development url:</p>
-        <pre><code>"content_scripts": [ {
+        <pre  data-aos="fade-right"><code>"content_scripts": [ {
     "js": [ "content.js" ],
     "matches": [ "https://localhost:*/*" ]
   }]
@@ -390,11 +395,11 @@ fileinput.addEventListener('change', function() {
         <p>Firefox enabled screen media capturing by default for secure origins. In you need to care about older versions, see below.</p>
         <p>Firefox enables screen media capturing through the <i>media.getusermedia.screensharing.allowed_domains</i> config setting. This can be modified automatically via an add-on, or it can be modified manually by navigating to <i>about:config</i> in Firefox. Modifying the setting manually to add <i>localhost</i> is easiest for development.
         <p><a href="https://github.com/HenrikJoreteg/getScreenMedia/">getScreenMedia</a> also contains a <a href="https://github.com/HenrikJoreteg/getScreenMedia/tree/master/firefox-extension-sample">Firefox extension sample</a>. Just modify the <i>boostrap.js</i> to match your domain:</p>
-        <pre><code>var domains = ["simplewebrtc.com"];</code></pre>
+        <pre  data-aos="fade-left"><code>var domains = ["simplewebrtc.com"];</code></pre>
 
         <h4>Starting screen share</h4>
         <p>Wire up an event handler or action for a user to initiate screen sharing. Here, we have a button to be disabled when screen sharing is unavailable, and to start sharing screen when clicked:</p>
-        <pre><code>var button = document.getElementById('screenShareButton'),
+        <pre  data-aos="fade-right"><code>var button = document.getElementById('screenShareButton'),
     setButton = function (bool) {
         button.innerText = bool ? 'share screen' : 'stop sharing';
     };
@@ -425,7 +430,7 @@ button.click(function () {
 
         <p>Then, you need to hook the <i>localScreenAdded</i> and <i>localScreenRemoved</i> events for adding and removing the local screen video element to the page:</p>
 
-        <pre><code>// local screen obtained
+        <pre  data-aos="fade-left"><code>// local screen obtained
 webrtc.on('localScreenAdded', function (video) {
     video.onclick = function () {
         video.style.width = video.videoWidth + 'px';
@@ -445,7 +450,7 @@ webrtc.on('localScreenRemoved', function (video) {
         <h2 id="device-selection">Selecting a microphone and camera</h2>
 
         <p>The first step to selecting media input devices is to enumerate sources which is done in a callback passed to <i>navigator.mediaDevices.enumerateDevices</i>. Separate and label audio and video devices:</p>
-        <pre><code>var audioDevices = [],
+        <pre  data-aos="fade-right"><code>var audioDevices = [],
     videoDevices = [];
     navigator.mediaDevices.enumerateDevices().then(function (devices) {
       for (var i = 0; i !== devices.length; ++i) {
@@ -465,7 +470,7 @@ webrtc.on('localScreenRemoved', function (video) {
         <p>You can then use these audio and video devices to populate a selection UI like a <i>select</i> tag, e.g. as shown <a href="https://webrtc.github.io/samples/src/content/devices/input-output/">here</a>. For example simplicity, we'll assume you can populate the UI with options and extract the selected option.</p>
 
         <p>Once you have the selected option, the user can trigger starting the connection. You'll create the SimpleWebRTC object similar to the basic example, but with additional options passed to the <i>media</i> option:</p>
-        <pre><code>//default media options
+        <pre  data-aos="fade-left"><code>//default media options
 var mediaOptions = {
     audio: true,
     video: true
@@ -493,7 +498,7 @@ var webrtc = new SimpleWebRTC({
 
         <h2 id="fail">Fail, with grace</h2>
         <p>Sometimes, connections fail. While there is little you can do about that, you can make some educated guesses about the <i>why</i>. Most of the time, this is caused by one of the peers being on a restriced network. In that case (and assuming that you are using a TURN server) the PeerConnection will not have gathered any candidates of type relay. SimpleWebRTC makes very easy to detect by exposing a <i>hadLocalRelayCandidate</i> and <i>hadRemoteRelayCandidate</i> property which can be checked when ICE fails:</p>
-        <pre><code>// local p2p/ice failure
+        <pre  data-aos="fade-right"><code>// local p2p/ice failure
 webrtc.on('iceFailed', function (peer) {
     var pc = peer.pc;
     console.log('had local relay candidate', pc.hadLocalRelayCandidate);
@@ -511,7 +516,7 @@ webrtc.on('connectivityError', function (peer) {
 
         <h2 id="nicknames">User-friendly nicknames</h2>
         <p>Sometimes, you want to display a nickname along with the video. That's now pretty simple, just add a 'nick' property to the config when creating the SimpleWebRTC object:</p>
-        <pre><code>var webrtc = new SimpleWebRTC({
+        <pre  data-aos="fade-left"><code>var webrtc = new SimpleWebRTC({
   // the id/element dom element that will hold "our" video
   localVideoEl: 'localVideo',
   // the id/element dom element that will hold remote videos
@@ -522,10 +527,10 @@ webrtc.on('connectivityError', function (peer) {
   url: 'https://example.com/'
 });</code></pre>
         <p>and evaluate peer.nick in the <i>videoAdded</i> event:
-        <pre><code>webrtc.on('videoAdded', function (video, peer) {
+        <pre  data-aos="fade-right"><code>webrtc.on('videoAdded', function (video, peer) {
     console.log('videoAdded', peer.nick);
 });</code></pre>
-
+<div class="end">
         <h2>Join without a camera or microphone</h2>
 
         <h2>Connection quality</h2>
@@ -545,14 +550,18 @@ webrtc.on('connectivityError', function (peer) {
         <h2>Full Mesh or Full Mess? Advanced Multiparty</h2>
 
         <h2>Recording a conference</h2>
-
+    </div>
 
       </section>
     <footer role="contentinfo">
       <a href="http://andyet.com" target="_blank" title="Made by &amp;yet"></a>
     </footer>
   </div>
-
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+  $(function(){
+   AOS.init();});
+</script>
   <script src="js/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
 

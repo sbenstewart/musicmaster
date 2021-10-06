@@ -2,7 +2,9 @@
 <html>
     <head>
         <title>SimpleWebRTC Demo</title>
-        <link rel="stylesheet" type="text/css" href="//cloud.typography.com/7773252/764742/css/fonts.css" />
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="//cloud.typography.com/7773252/764742/css/fonts.css"/>
         <link rel="stylesheet" href="css/style.min.css">
         <link rel="icon" type="image/png" href="img/favicon.png">
         <style>
@@ -10,6 +12,7 @@
                 position: relative;
                 width: 200px;
                 height: 150px;
+                
             }
             .videoContainer video {
                 position: absolute;
@@ -36,7 +39,10 @@
             }
         </style>
     </head>
+    <html>
     <body>
+        <section>
+        <div class="content">
         <h1 class="logo"><span>simple</span><span>WebRTC</span></h1>
         <h2>You can build cool stuff with WebRTC in five minutes.</h2>
 
@@ -59,7 +65,7 @@
         </div>
         <div id="remotes"></div>
         <hr>
-        <div>
+        <div style="text-align:justify;">
           <h3>A note on connectivity issues</h3>
           If you see black videos from peers or the connection state displayed ontop of those videos
           either hangs in <i>Connecting to peer...</i> or changes to <i>Connection failed</i>, a direct peer-to-peer connection could not be established.
@@ -68,8 +74,14 @@
           You can check if those peers can connect each other on <a href="https://talky.io">talky.io</a> which runs a TURN server.
         </div>
         <div>
+
           Want to know more about how some of these features work? Check the <a href="notsosimple.html">documentation</a>
         </div>
+       
+    </div>  
+    
+    
+    </section>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
         <script src="latest-v2.js"></script>
         <script>

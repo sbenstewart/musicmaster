@@ -5,15 +5,17 @@
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="WebRTC, SimpleWebRTC, Talky, Talky.io, library, JavaScript, Node.js">
 
     <link rel="stylesheet" type="text/css" href="//cloud.typography.com/7773252/764742/css/fonts.css" />
     <link rel="stylesheet" href="css/style.min.css">
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="img/favicon.png">
   </head>
-
+<html>
   <body>
 
     <div class="content" role="main">
@@ -30,10 +32,10 @@
         
         <p>For solving advanced problems, <a href="notsosimple.html">see here</a>.</p>
 
-        <div class="intro">
+        <div class="intro" >
         <h3>A dab of HTML</h3>
 
-        <pre><code>&lt;!DOCTYPE html&gt;
+        <pre data-aos="fade-left"><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
     &lt;head&gt;
         &lt;script src=&quot;https://webrtc.github.io/adapter/adapter-latest.js&quot;&gt;&lt;/script&gt; 
@@ -46,7 +48,7 @@
 &lt;/html&gt;</code></pre>
 
         <h3>Stir in the WebRTC object</h3>
-        <pre><code>var webrtc = new SimpleWebRTC({
+        <pre data-aos="fade-right"><code>var webrtc = new SimpleWebRTC({
   // the id/element dom element that will hold "our" video
   localVideoEl: 'localVideo',
   // the id/element dom element that will hold remote videos
@@ -56,7 +58,7 @@
 });</code></pre>
 
         <h3>And join when ready</h3>
-        <pre><code>// we have to wait until it's ready
+        <pre data-aos="fade-left"><code>// we have to wait until it's ready
 webrtc.on('readyToCall', function () {
   // you can name it anything
   webrtc.joinRoom('your awesome room name');
@@ -123,9 +125,13 @@ webrtc.on('readyToCall', function () {
       <a href="http://andyet.com" target="_blank" title="Made by &amp;yet"></a>
     </footer>
   </div>
-
+   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+  $(function(){
+   AOS.init();});
+</script>
   <script src="js/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
-
+ 
 </body>
 </html>
